@@ -4,19 +4,21 @@ import { connectDB } from "./libs/db.js";
 import authRoute from "./routes/authRoute.js";
 import userRoute from "./routes/userRoute.js";
 import cookieParser from "cookie-parser";
+import { protectedRoute } from "./middlewares/authMiddlewares.js";
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5001;
 
-// Middlewares
+// Middlewares    middlewares là những hàm chạy trước khi vào logic chính của API   
 app.use(express.json());
 app.use(cookieParser()); 
 //public routes
 app.use('/api/auth', authRoute);
 
 //private routes
+app.use(protectedRoute)
 app.use('/api/user', userRoute);
 
 connectDB().then(() => {
